@@ -1,0 +1,49 @@
+# FastCrib repositories. Paths are the paths the app process can see.
+# Docker Compose mounts the host checkout directory at /repos
+# (ROVER_REPOS_DIR, default ./mounted-repos). Clone each repo into that
+# directory under the name below. Missing paths are skipped at startup.
+# This file does not start an index.
+workspaces:
+  - slug: fastcrib
+    name: FastCrib
+    repositories:
+      - name: re-be-service-org
+        path: /repos/re-be-service-org
+        # https://dev.azure.com/fastenal/FastCrib/_git/re-be-service-org
+        ignore_globs: []
+        use_default_ignores: true
+      - name: re-be-import-service
+        path: /repos/re-be-import-service
+        # https://dev.azure.com/fastenal/FastCrib/_git/re-be-import-service
+        ignore_globs: []
+        use_default_ignores: true
+      - name: re-be-service-approvals
+        path: /repos/re-be-service-approvals
+        # https://dev.azure.com/fastenal/FastCrib/_git/re-be-service-approvals
+        ignore_globs: []
+        use_default_ignores: true
+      - name: re-be-service-catalog
+        path: /repos/re-be-service-catalog
+        # https://dev.azure.com/fastenal/FastCrib/_git/re-be-service-catalog
+        ignore_globs: []
+        use_default_ignores: true
+      - name: re-be-service-awo
+        path: /repos/re-be-service-awo
+        # https://dev.azure.com/fastenal/FastCrib/_git/re-be-service-awo
+        ignore_globs: []
+        use_default_ignores: true
+      - name: re-be-service-inventory
+        path: /repos/re-be-service-inventory
+        # https://dev.azure.com/fastenal/FastCrib/_git/re-be-service-inventory
+        ignore_globs: []
+        use_default_ignores: true
+      - name: re-be-service-ldm
+        path: /repos/re-be-service-ldm
+        # https://dev.azure.com/fastenal/FastCrib/_git/re-be-service-ldm
+        ignore_globs: []
+        use_default_ignores: true
+      - name: re-be-service-llm
+        path: /repos/re-be-service-llm
+        # https://dev.azure.com/fastenal/FastCrib/_git/re-be-service-llm
+        ignore_globs: []
+        use_default_ignores: true
