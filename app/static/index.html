@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codebase Rover</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <p class="eyebrow">Local codebase Q&amp;A and review</p>
+      <h1>Codebase Rover</h1>
+    </div>
+    <div class="model-status" id="model-status">Loading model settings…</div>
+  </header>
+  <main>
+    <section class="panel">
+      <div class="row">
+        <label for="workspace">Workspace</label>
+        <select id="workspace"></select>
+        <button type="button" id="refresh">Refresh</button>
+      </div>
+      <p class="scope" id="scope-note"></p>
+      <h2>Environments</h2>
+      <p class="hint">Metadata only. A revision is stored only when you set one from a connected repository.</p>
+      <ul id="environments" class="plain"></ul>
+      <form id="environment-form" class="grid">
+        <label>Environment
+          <select id="env-slug"></select>
+        </label>
+        <label>Repository
+          <select id="env-repo"></select>
+        </label>
+        <label>Revision
+          <input id="env-revision" placeholder="commit SHA or branch">
+        </label>
+        <button type="submit">Save revision</button>
+        <button type="button" id="clear-revision">Clear</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Repositories</h2>
+      <form id="repo-form" class="grid">
+        <label>Name
+          <input id="repo-name" placeholder="optional">
+        </label>
+        <label>Local git path
+          <input id="repo-path" required placeholder="/repos/fastcrib">
+        </label>
+        <label>Extra ignore globs
+          <input id="repo-ignores" placeholder="secrets/**, tmp/**">
+        </label>
+        <label class="check"><input id="repo-index-now" type="checkbox" checked> Start indexing after connect</label>
+        <button type="submit">Connect repository</button>
+      </form>
+      <div id="repos"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Ask</h2>
+      <form id="ask-form">
+        <label>Question
+          <textarea id="question" required rows="4" placeholder="Where is tax calculated?"></textarea>
+        </label>
+        <label>Limit to repository
+          <select id="ask-repo"><option value="">All repositories in this workspace</option></select>
+        </label>
+        <label>Model
+          <select id="ask-model">
+            <option value="ollama">Ollama (local)</option>
+            <option value="hosted">Hosted model</option>
+          </select>
+        </label>
+        <label class="check"><input id="ask-confirm" type="checkbox"> I confirm sending only this question and the retrieved excerpts to a hosted model</label>
+        <button type="submit">Ask</button>
+      </form>
+      <div id="answer"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Review a diff</h2>
+      <form id="review-form">
+        <label>Title
+          <input id="review-title" placeholder="optional">
+        </label>
+        <label>Repository
+          <select id="review-repo"><option value="">Diff only, do not read git</option></select>
+        </label>
+        <label>Head revision
+          <input id="review-head" placeholder="commit SHA">
+        </label>
+        <label>Base revision
+          <input id="review-base" placeholder="optional, used when diff is omitted">
+        </label>
+        <label>Unified diff
+          <textarea id="review-diff" rows="10" placeholder="diff --git a/file b/file"></textarea>
+        </label>
+        <label>Model
+          <select id="review-model">
+            <option value="ollama">Ollama (local)</option>
+            <option value="hosted">Hosted model</option>
+          </select>
+        </label>
+        <label class="check"><input id="review-confirm" type="checkbox"> I confirm sending only this diff and the retrieved excerpts to a hosted model</label>
+        <button type="submit">Review</button>
+      </form>
+      <div id="review"></div>
+    </section>
+
+    <details class="panel">
+      <summary>Reset the local index</summary>
+      <p class="hint">Deletes indexed files, chunks, and index jobs. Workspaces and repository connections stay. Source git repositories are not modified.</p>
+      <button type="button" id="reset-index">Reset index</button>
+    </details>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

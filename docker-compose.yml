@@ -1,0 +1,66 @@
+# Local-only stack. The database password is a development default for this
+# compose file, not a hosted or shared credential.
+name: codebase-rover
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: rover
+      POSTGRES_PASSWORD: rover
+      POSTGRES_DB: rover
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - rover_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rover -d rover"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      DATABASE_URL: postgresql+psycopg://rover:rover@db:5432/rover
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_CHAT_MODEL: ${OLLAMA_CHAT_MODEL:-llama3.2}
+      OLLAMA_EMBED_MODEL: ${OLLAMA_EMBED_MODEL:-nomic-embed-text}
+      EMBEDDING_DIM: "768"
+      HOSTED_MODEL_ENABLED: ${HOSTED_MODEL_ENABLED:-false}
+      HOSTED_MODEL_BASE_URL: ${HOSTED_MODEL_BASE_URL:-}
+      HOSTED_MODEL_API_KEY: ${HOSTED_MODEL_API_KEY:-}
+      HOSTED_MODEL_NAME: ${HOSTED_MODEL_NAME:-}
+      ROVER_ALLOWED_ROOTS: ${ROVER_ALLOWED_ROOTS:-}
+      ROVER_CONFIG: ${ROVER_CONFIG:-}
+    volumes:
+      - ${ROVER_REPOS_DIR:-./mounted-repos}:/repos:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/health')",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  rover_pgdata:
+  ollama_data:

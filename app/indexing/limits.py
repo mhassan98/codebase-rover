@@ -1,0 +1,9 @@
+"""Fixed index limits. The embedding width is part of the database schema."""
+
+EMBEDDING_DIM = 768
+MAX_BLOB_BYTES = 512_000
+MAX_FILE_LINES = 20_000
+MAX_CHUNKS_PER_FILE = 400
+STRUCTURAL_LINE_LIMIT = 120
+WINDOW_LINES = 80
+WINDOW_OVERLAP = 10
